@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>البحث عن الشهادات</title>
+  <script>
+    async function searchCertificate() {
+      var id = document.getElementById('idInput').value;
+      var scriptUrl = 'https://script.google.com/macros/s/AKfycbwBPgjs86v5N9RtgnM8bDBXkTQ5_DauwrcKrCPW02-UP2yc1fx5RnV-mNfubltZQ3ta/exec?id=' + id;
+      
+      try {
+        let response = await fetch(scriptUrl);
+        let result = await response.json();
+        displayResult(result);
+      } catch (error) {
+        document.getElementById('result').innerText = 'حدث خطأ: ' + error.message;
+      }
+    }
+
+    function displayResult(result) {
+      var resultDiv = document.getElementById('result');
+      if (result.url) {
+        var iframe = document.createElement('iframe');
+        iframe.src = result.url;
+        iframe.style.width = '100%';
+        iframe.style.height = '500px';
+        resultDiv.innerHTML = '';
+        resultDiv.appendChild(iframe);
+      } else {
+        resultDiv.innerText = result.error;
+      }
+    }
+  </script>
+</head>
+<body>
+  <input type="text" id="idInput" placeholder="أدخل رقم الهوية">
+  <button onclick="searchCertificate()">عرض النتيجة</button>
+  <div id="result"></div>
+</body>
+</html>
